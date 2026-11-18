@@ -1,4 +1,4 @@
-# My Personal Website ([popovich.dev](https://popovich.dev)
+# My Personal Website ([popovich.dev](https://popovich.dev))
 
 A static site built with [Astro](https://astro.build): plain CSS, self-hosted fonts, no client-side framework.
 
