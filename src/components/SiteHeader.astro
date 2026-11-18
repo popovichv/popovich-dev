@@ -1,0 +1,66 @@
+---
+import { site } from '../data/site';
+import MotionToggle from './MotionToggle.astro';
+
+interface Props {
+  fullscreen?: boolean;
+}
+
+const { fullscreen = false } = Astro.props;
+---
+
+<header class:list={['site-header', { fullscreen }]}>
+  <div class="bar">
+    <span class="brand">
+      <span class="mark" aria-hidden="true"></span>
+      {site.name} / {site.role.toLowerCase()}
+    </span>
+    <span>
+      {site.city}, {site.country}
+    </span>
+    <div class="actions">
+      <MotionToggle />
+    </div>
+  </div>
+  <slot />
+</header>
+
+<style>
+  /* The bar and the slotted hero share the first screen. */
+  .fullscreen {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    height: 100svh;
+  }
+
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 18px var(--gutter);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+  }
+
+  .mark {
+    width: 12px;
+    height: 12px;
+    background: var(--accent);
+  }
+
+  .actions {
+    display: flex;
+    gap: 28px;
+  }
+</style>

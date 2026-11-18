@@ -1,0 +1,35 @@
+---
+import { Image } from 'astro:assets';
+import type { HTMLAttributes } from 'astro/types';
+import photo from '../../assets/vladimir-pill.webp';
+
+type Props = HTMLAttributes<'span'>;
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<span class:list={['capsule', className]} {...rest}>
+  <Image class="photo" src={photo} alt="" loading="eager" />
+</span>
+
+<style>
+  .capsule {
+    display: inline-flex;
+    flex: none;
+    width: 1.62em;
+    height: 0.7em;
+    overflow: hidden;
+    border-radius: 999px;
+    background: var(--capsule-tint);
+    translate: 0 -0.02em;
+  }
+
+  .photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 40%;
+    filter: grayscale(1) contrast(1.1) brightness(1.05);
+    mix-blend-mode: multiply;
+  }
+</style>

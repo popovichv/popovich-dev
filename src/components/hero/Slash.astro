@@ -1,0 +1,23 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'svg'>;
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<svg class:list={['slash', className]} viewBox="0 0 40 100" aria-hidden="true" {...rest}>
+  <line x1="36" y1="0" x2="4" y2="100"></line>
+</svg>
+
+<style>
+  /* 95% of the cap height, stroked as thick as the thin letters next to it. */
+  .slash {
+    flex: none;
+    width: 0.266em;
+    height: 0.665em;
+    translate: 0 -0.016em;
+    stroke: var(--accent);
+    stroke-width: 5.8;
+  }
+</style>

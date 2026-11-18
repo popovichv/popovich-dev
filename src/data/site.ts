@@ -6,9 +6,8 @@ export const site = {
   name: 'Vladimir Popovich',
   role: 'Software engineer',
   city: 'Toronto',
-  region: 'Ontario',
-  country: 'CA',
-  bio: "Software engineer in Toronto, Ontario. Right now I build HCMS, the Ontario Ministry of Transportation's highway corridor permitting portal.",
+  country: 'Canada',
+  bio: "Software engineer in Toronto, Canada. Currently working on HCMS, the Ontario Ministry of Transportation's highway corridor permitting portal.",
   previously: [
     {
       work: 'Automation for a 10,000-vehicle fleet',
@@ -21,4 +20,6 @@ export const site = {
       place: 'Hamilton, Canada',
     },
   ],
+  stack: ['TypeScript', 'React', 'Angular', 'Python', 'FastAPI', '.NET'],
+  tools: ['PostgreSQL', 'RAG', 'Azure', 'AWS', 'Docker', 'MCP', 'LLMs'],
 } as const;

@@ -1,0 +1,39 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'svg'> {
+  size?: string;
+  strokeWidth?: number;
+  spin?: boolean;
+}
+
+const { size = '0.5em', strokeWidth = 15, spin = false, class: className, ...rest } = Astro.props;
+---
+
+<svg
+  class:list={['asterisk', { spin }, className]}
+  width={size}
+  height={size}
+  viewBox="0 0 100 100"
+  aria-hidden="true"
+  {...rest}
+>
+  <path d="M50 4v92M4 50h92M17 17l66 66M83 17 17 83" stroke-width={strokeWidth}></path>
+</svg>
+
+<style>
+  .asterisk {
+    flex: none;
+    stroke: var(--accent);
+  }
+
+  .spin {
+    animation: asterisk-spin 6s linear infinite;
+  }
+
+  @keyframes asterisk-spin {
+    to {
+      rotate: 360deg;
+    }
+  }
+</style>

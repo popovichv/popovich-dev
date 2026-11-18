@@ -1,0 +1,62 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'div'> {
+  direction?: 'left' | 'right';
+  /** Seconds for one copy of the content to scroll past. */
+  duration: number;
+  /**
+   * Copies of the content in each half of the loop. A half narrower than the screen
+   * leaves an empty gap just before the loop restarts.
+   */
+  repeat?: number;
+}
+
+const { direction = 'left', duration, repeat = 1, class: className, ...rest } = Astro.props;
+
+const content = await Astro.slots.render('default');
+const copies = Array.from({ length: repeat * 2 }, (_, index) => index);
+---
+
+<div
+  class:list={['marquee', className]}
+  data-direction={direction}
+  style={`--marquee-duration: ${duration * repeat}s`}
+  {...rest}
+>
+  <div class="track">
+    {copies.map((index) => (
+      <div class="copy" aria-hidden={index > 0 ? 'true' : undefined} set:html={content} />
+    ))}
+  </div>
+</div>
+
+<style>
+  .marquee {
+    overflow: hidden;
+  }
+
+  /* Two identical halves: moving the track by half its width lands exactly where it started. */
+  .track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll var(--marquee-duration) linear infinite;
+  }
+
+  [data-direction='right'] .track {
+    animation-direction: reverse;
+  }
+
+  .copy {
+    display: flex;
+    align-items: center;
+    gap: var(--marquee-gap, 0);
+    padding-inline-end: var(--marquee-gap, 0);
+  }
+
+  @keyframes marquee-scroll {
+    to {
+      translate: -50% 0;
+    }
+  }
+</style>

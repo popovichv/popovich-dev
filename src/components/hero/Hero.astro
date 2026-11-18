@@ -1,0 +1,140 @@
+---
+import { site } from '../../data/site';
+import Asterisk from '../Asterisk.astro';
+import Marquee from '../Marquee.astro';
+import PhotoCapsule from './PhotoCapsule.astro';
+import Slash from './Slash.astro';
+
+const [firstName, lastName] = site.name.split(' ');
+
+// Seven words: listing them twice keeps solid and outline alternating across the loop seam.
+const tools = [...site.tools, ...site.tools];
+---
+
+<div class="hero">
+  <h1 class="visually-hidden">
+    {site.name}, {site.role.toLowerCase()}, {site.city}
+  </h1>
+
+  <div class="rows" aria-hidden="true">
+    <Marquee class="name" duration={40} repeat={3}>
+      <span>{firstName}</span>
+      <PhotoCapsule />
+      <span>{lastName}</span>
+      <Asterisk class="name-asterisk" spin />
+    </Marquee>
+
+    <Marquee class="outlined" direction="right" duration={80} repeat={2}>
+      <span>{lastName}</span>
+      <span>{firstName}</span>
+    </Marquee>
+
+    <Marquee class="band accent-band" duration={11} repeat={2}>
+      <span>{site.name}</span>
+      <span class="dot">●</span>
+    </Marquee>
+
+    <Marquee class="stack" direction="right" duration={55} repeat={2}>
+      {site.stack.map((tech) => (
+        <>
+          <span>{tech}</span>
+          <Slash />
+        </>
+      ))}
+    </Marquee>
+
+    <Marquee class="band ink-band" duration={40} repeat={2}>
+      <span>{site.role}</span>
+      <Asterisk spin />
+      <span>{site.city}</span>
+      <Asterisk spin />
+    </Marquee>
+
+    <Marquee class="tools" direction="right" duration={70}>
+      {tools.map((tool, index) => (
+        <span class:list={{ 'accent-outline': index % 2 }}>{tool}</span>
+      ))}
+    </Marquee>
+  </div>
+</div>
+
+<style>
+  .hero {
+    container-type: size;
+  }
+
+  /*
+   * Sized so the rows fill the height under the header bar: six rows at line-height 0.8,
+   * 0.08em of padding on each of the two bands, and 6px above the first row.
+   * On tall, narrow screens the width caps the size and the spare space sits above the rows.
+   */
+  .rows {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+    font-size: min((100cqh - 6px) / 4.96, 30cqw);
+    font-weight: 900;
+    line-height: 0.8;
+    text-transform: uppercase;
+  }
+
+  .name {
+    --marquee-gap: 0.18em;
+    padding-top: 6px;
+    font-stretch: 62%;
+  }
+
+  .name-asterisk {
+    margin-inline: 0.04em;
+  }
+
+  .outlined {
+    --marquee-gap: 0.3em;
+    font-stretch: 125%;
+    font-weight: 800;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--ink);
+  }
+
+  .band {
+    padding: 0.06em 0 0.02em;
+    font-stretch: 100%;
+  }
+
+  .accent-band {
+    --marquee-gap: 0.3em;
+    background: var(--accent);
+    color: var(--ink);
+  }
+
+  /* The design leaves 0.27em after the dot, slightly less than the row gap. */
+  .dot {
+    font-size: 0.3em;
+    margin-right: -0.1em;
+  }
+
+  .stack {
+    --marquee-gap: 0.25em;
+    font-stretch: 62%;
+    font-weight: 200;
+  }
+
+  .ink-band {
+    --marquee-gap: 0.25em;
+    background: var(--ink);
+    color: var(--ground);
+  }
+
+  .tools {
+    --marquee-gap: 0.3em;
+    font-stretch: 80%;
+    font-style: italic;
+    font-weight: 700;
+  }
+
+  .accent-outline {
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 2.5px var(--accent);
+  }
+</style>

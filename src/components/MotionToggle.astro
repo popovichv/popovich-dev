@@ -1,0 +1,22 @@
+<button type="button" class="text-button motion-toggle" data-motion-toggle>
+  Pause motion
+</button>
+
+<script>
+  const root = document.documentElement;
+  const toggle = document.querySelector<HTMLButtonElement>('[data-motion-toggle]');
+
+  toggle?.addEventListener('click', () => {
+    const pause = root.dataset.motion !== 'off';
+    root.dataset.motion = pause ? 'off' : 'on';
+    toggle.textContent = pause ? 'Play motion' : 'Pause motion';
+  });
+</script>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    .motion-toggle {
+      display: none;
+    }
+  }
+</style>

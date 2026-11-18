@@ -48,6 +48,39 @@ a {
   color: var(--ink);
 }
 
+/* Motion stops for viewers who ask for less of it, and pauses from the toggle in the header. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+:root[data-motion='off'] *,
+:root[data-motion='off'] *::before,
+:root[data-motion='off'] *::after {
+  animation-play-state: paused !important;
+}
+
+/* A button that reads as part of the surrounding text. */
+.text-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.text-button:hover {
+  text-decoration: underline 1px;
+  text-underline-offset: 3px;
+}
+
 /* Hidden on screen, still read by screen readers. */
 .visually-hidden {
   position: absolute;

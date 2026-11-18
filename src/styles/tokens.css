@@ -14,7 +14,6 @@
   /* Type */
   --font-display: 'Archivo Variable', 'Arial Narrow', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-  --hero-size: clamp(72px, 12.2vw, 176px);
 
   /* Layout */
   --gutter: 28px;
