@@ -1,0 +1,21 @@
+/* Design tokens. Every color, font and shared size on the site comes from here. */
+
+:root {
+  /* Color */
+  --ground: #f4f4f2;
+  --ink: #0c0c0c;
+  --accent: #ff5a00;
+  --muted: #555553;
+
+  /* Photo capsule tint: a mix of ground and accent. 0% is plain black and white, 100% is full orange. */
+  --capsule-strength: 70%;
+  --capsule-tint: color-mix(in srgb, var(--accent) var(--capsule-strength), var(--ground));
+
+  /* Type */
+  --font-display: 'Archivo Variable', 'Arial Narrow', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --hero-size: clamp(72px, 12.2vw, 176px);
+
+  /* Layout */
+  --gutter: 28px;
+}

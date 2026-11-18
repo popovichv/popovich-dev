@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout>
+  <h1>{site.name}</h1>
+  <p>{site.bio}</p>
+</BaseLayout>
+
+<style>
+  h1 {
+    padding: 0 var(--gutter);
+    font-size: var(--hero-size);
+    font-stretch: 62%;
+    font-weight: 900;
+    line-height: 0.8;
+    text-transform: uppercase;
+  }
+
+  p {
+    max-width: 440px;
+    padding: 36px var(--gutter);
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.25;
+  }
+</style>
