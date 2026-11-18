@@ -7,6 +7,7 @@ import '../styles/tokens.css';
 import '../styles/global.css';
 
 import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
+import ContactSheet from '../components/ContactSheet.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { site } from '../data/site';
 
@@ -27,6 +28,9 @@ const person = {
   name: site.name,
   jobTitle: site.role,
   url: Astro.site?.href,
+  email: site.email,
+  knowsLanguage: site.languages,
+  sameAs: site.profiles.map((profile) => profile.href),
   address: {
     '@type': 'PostalAddress',
     addressLocality: site.city,
@@ -66,5 +70,6 @@ const person = {
     <main id="main">
       <slot />
     </main>
+    <ContactSheet />
   </body>
 </html>
