@@ -10,30 +10,48 @@ const { fullscreen = false } = Astro.props;
 ---
 
 <header class:list={['site-header', { fullscreen }]}>
-  <div class="bar">
-    <span class="brand">
-      <span class="mark" aria-hidden="true"></span>
-      {site.name} / {site.role.toLowerCase()}
-    </span>
-    <span>
-      {site.city}, {site.country}
-    </span>
-    <div class="actions">
-      <MotionToggle />
-      <button type="button" class="text-button" commandfor="contact" command="show-modal">
-        Contact
-      </button>
+  <div class="screen">
+    <div class="bar">
+      <span class="brand">
+        <span class="mark" aria-hidden="true"></span>
+        {site.name} / {site.role.toLowerCase()}
+      </span>
+      <span>
+        {site.city}, {site.country}
+      </span>
+      <div class="actions">
+        <MotionToggle />
+        <button type="button" class="text-button" commandfor="contact" command="show-modal">
+          Contact
+        </button>
+      </div>
     </div>
+    <slot />
   </div>
-  <slot />
 </header>
 
 <style>
   /* The bar and the slotted hero share the first screen. */
-  .fullscreen {
+  .fullscreen .screen {
+    position: sticky;
+    top: 0;
     display: grid;
     grid-template-rows: auto 1fr;
     height: 100svh;
+  }
+
+  /*
+   * The first screen stays pinned for this much scrolling while the hero plays its exit,
+   * then scrolls away. Without the exit (no scripts or reduced motion) there is nothing to wait for.
+   */
+  .fullscreen {
+    --runway: 100svh;
+  }
+
+  @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+    .fullscreen {
+      height: calc(100svh + var(--runway));
+    }
   }
 
   .bar {

@@ -16,10 +16,10 @@ const tools = [...site.tools, ...site.tools];
     {site.name}, {site.role.toLowerCase()}, {site.city}
   </h1>
 
-  <div class="rows" aria-hidden="true">
+  <div class="rows" aria-hidden="true" data-hero-rows>
     <Marquee class="name" duration={40} repeat={3}>
       <span>{firstName}</span>
-      <PhotoCapsule />
+      <PhotoCapsule class="name-photo" />
       <span>{lastName}</span>
       <Asterisk class="name-asterisk" spin />
     </Marquee>
@@ -61,6 +61,7 @@ const tools = [...site.tools, ...site.tools];
 <style>
   .hero {
     container-type: size;
+    overflow-x: clip;
   }
 
   /*
@@ -137,4 +138,106 @@ const tools = [...site.tools, ...site.tools];
     -webkit-text-fill-color: transparent;
     -webkit-text-stroke: 2.5px var(--accent);
   }
+
+  /*
+   * Rows travel along their own track. On load each one rushes in from the side its text
+   * comes from and brakes into place. Scrolling away sends it out the other side, leaning
+   * into the speed; the script below sets --exit from 0 to 1.
+   */
+  .rows > [data-direction='left'] {
+    --dir: -1;
+  }
+
+  .rows > [data-direction='right'] {
+    --dir: 1;
+  }
+
+  .rows > :nth-child(2) {
+    --row: 1;
+  }
+
+  .rows > :nth-child(3) {
+    --row: 2;
+  }
+
+  .rows > :nth-child(4) {
+    --row: 3;
+  }
+
+  .rows > :nth-child(5) {
+    --row: 4;
+  }
+
+  .rows > :nth-child(6) {
+    --row: 5;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .rows > * {
+      animation: row-in 1.5s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--row, 0) * 90ms) backwards;
+      transform: translateX(calc(var(--dir) * pow(var(--exit, 0), 2) * 110%))
+        skewX(calc(var(--dir) * var(--exit, 0) * -14deg));
+      will-change: transform;
+    }
+
+    /* Once the name has landed, the photo opens out from the middle of its capsule. */
+    .name-photo {
+      animation: capsule-open 900ms cubic-bezier(0.65, 0, 0.35, 1) 550ms backwards;
+    }
+  }
+
+  @keyframes row-in {
+    from {
+      translate: calc(var(--dir) * -100%) 0;
+    }
+  }
+
+  @keyframes capsule-open {
+    from {
+      clip-path: inset(0 50% round 999px);
+    }
+
+    to {
+      clip-path: inset(0 round 999px);
+    }
+  }
 </style>
+
+<script>
+  if (matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+    const container = document.querySelector<HTMLElement>('[data-hero-rows]')!;
+    const stage = container.closest('header')!;
+    const rows = Array.from(container.children as HTMLCollectionOf<HTMLElement>);
+    const loops = rows.map((row) =>
+      row
+        .getAnimations({ subtree: true })
+        .filter((animation) => animation.effect?.getTiming().iterations === Infinity),
+    );
+
+    // The header holds the first screen in place, then lets it scroll away. Each row is gone by the
+    // time its bottom edge reaches the top of the viewport: where that edge sits once released.
+    let distances: number[] = [];
+
+    const measure = () => {
+      const release = stage.getBoundingClientRect().bottom + window.scrollY;
+      const { bottom } = container.getBoundingClientRect();
+      distances = rows.map((row) => release - (bottom - row.getBoundingClientRect().bottom));
+    };
+
+    const update = () => {
+      rows.forEach((row, index) => {
+        const exit = Math.min(window.scrollY / distances[index], 1);
+        row.style.setProperty('--exit', exit.toFixed(3));
+        loops[index].forEach((loop) => loop.updatePlaybackRate(1 + exit * 9));
+      });
+    };
+
+    measure();
+    update();
+    addEventListener('scroll', update, { passive: true });
+    addEventListener('resize', () => {
+      measure();
+      update();
+    });
+  }
+</script>
