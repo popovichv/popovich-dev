@@ -65,7 +65,7 @@ const branchIndex = history.findIndex((commit) => commit.branch);
 
 <style>
   .history {
-    padding: 96px var(--gutter);
+    padding: 64px var(--gutter) 96px;
   }
 
   .label,
@@ -103,11 +103,11 @@ const branchIndex = history.findIndex((commit) => commit.branch);
   }
 
   .lede {
-    max-width: 340px;
+    max-width: 20.5em;
     margin-top: 36px;
-    font-size: 16px;
+    font-size: clamp(18px, 1.7vw, 22px);
     font-weight: 500;
-    line-height: 1.4;
+    line-height: 1.55;
   }
 
   .log {
@@ -299,7 +299,7 @@ const branchIndex = history.findIndex((commit) => commit.branch);
     }
 
     .head {
-      --typing: calc(var(--chars) * 35ms);
+      --typing: calc(var(--chars) * 28ms);
     }
 
     /*
