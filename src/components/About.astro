@@ -106,7 +106,7 @@ import Asterisk from './Asterisk.astro';
   }
 
   .label {
-    font-size: 12px;
+    font-size: var(--text-label);
     line-height: 1.55;
   }
 
@@ -193,7 +193,7 @@ import Asterisk from './Asterisk.astro';
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 4px 16px;
-    font-size: 11px;
+    font-size: var(--text-meta);
     white-space: nowrap;
   }
 
@@ -207,7 +207,7 @@ import Asterisk from './Asterisk.astro';
 
   .lede {
     max-width: 32em;
-    font-size: clamp(18px, 1.7vw, 22px);
+    font-size: var(--text-lede);
     font-weight: 500;
     line-height: 1.55;
   }
@@ -273,7 +273,7 @@ import Asterisk from './Asterisk.astro';
     gap: 10px;
     padding: 0;
     list-style: none;
-    font-size: 18px;
+    font-size: var(--text-body);
     font-weight: 500;
     line-height: 1.3;
   }

@@ -15,6 +15,10 @@
   /* Type */
   --font-display: 'Archivo Variable', 'Arial Narrow', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --text-meta: 11px;
+  --text-label: 12px;
+  --text-body: 18px;
+  --text-lede: clamp(18px, 1.7vw, 22px);
 
   /* Layout */
   --gutter: 28px;
