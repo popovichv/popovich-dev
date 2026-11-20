@@ -8,9 +8,9 @@
   --muted: #555553;
   --rule: color-mix(in srgb, var(--ink) 14%, var(--ground));
 
-  /* Photo capsule tint: a mix of ground and accent. 0% is plain black and white, 100% is full orange. */
-  --capsule-strength: 70%;
-  --capsule-tint: color-mix(in srgb, var(--accent) var(--capsule-strength), var(--ground));
+  /* Photo tint: a mix of ground and accent. 0% is plain black and white, 100% is full orange. */
+  --photo-tint-strength: 70%;
+  --photo-tint: color-mix(in srgb, var(--accent) var(--photo-tint-strength), var(--ground));
 
   /* Type */
   --font-display: 'Archivo Variable', 'Arial Narrow', sans-serif;

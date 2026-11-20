@@ -1,5 +1,5 @@
 /**
- * Personal details used across the site: header, hero, intro, contact sheet and SEO tags.
+ * Personal details used across the site: header, hero, about, contact sheet and SEO tags.
  * The site URL lives in astro.config.mjs and is read through `Astro.site`.
  */
 export const site = {

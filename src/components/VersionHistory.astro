@@ -60,25 +60,7 @@ const branchIndex = history.findIndex((commit) => commit.branch);
 </section>
 
 <script>
-  // Blocks that scroll into view together still play in order, half a second apart.
-  const gap = 500;
-  let nextStart = 0;
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      for (const { isIntersecting, target } of entries) {
-        if (!isIntersecting) continue;
-        observer.unobserve(target);
-
-        const start = Math.max(performance.now(), nextStart);
-        nextStart = start + gap;
-        setTimeout(() => target.setAttribute('data-reveal', 'shown'), start - performance.now());
-      }
-    },
-    { rootMargin: '0px 0px -20% 0px' },
-  );
-
-  document.querySelectorAll('[data-reveal]').forEach((block) => observer.observe(block));
+  import '../scripts/reveal';
 </script>
 
 <style>

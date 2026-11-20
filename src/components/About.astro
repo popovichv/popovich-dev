@@ -1,0 +1,375 @@
+---
+import { Image } from 'astro:assets';
+import photo from '../assets/vladimir-mountains.webp';
+import { site } from '../data/site';
+import Asterisk from './Asterisk.astro';
+---
+
+<section class="about" id="about" aria-labelledby="about-title">
+  <div class="head" data-reveal="waiting">
+    <p class="label">(01) About</p>
+    <h2 id="about-title" class="title">
+      <span class="line">
+        <span>I build the</span>
+      </span>{' '}
+      <span class="line" style="--i: 1">
+        <span>
+          whole <span class="accent">thing</span>
+        </span>
+      </span>
+    </h2>
+  </div>
+
+  <figure class="figure" data-reveal="waiting">
+    <div class="frame">
+      <Image
+        class="photo"
+        src={photo}
+        alt="Vladimir with arms crossed in front of snow-capped mountains"
+        widths={[480, 800, 1200]}
+        sizes="(min-width: 960px) 36vw, (min-width: 536px) 480px, calc(100vw - 56px)"
+      />
+    </div>
+    <figcaption class="caption">
+      <span>
+        Fig. 1<span class="hint"> / Hover for color</span>
+      </span>
+      <span>Lake Louise, Canada</span>
+    </figcaption>
+  </figure>
+
+  <div class="body" data-reveal="waiting">
+    <p class="lede">
+      I work across the stack: React and Angular up front, Python and .NET behind, PostgreSQL
+      underneath. I enjoy working with AI most of all: machine learning, RAG pipelines and agents. I
+      started in Moscow automating a 10,000-vehicle fleet, led a frontend team at IDEAWORKS in
+      Hamilton, and now build public permitting software for Ontario's Ministry of Transportation.
+      On the side I take contracts and build my own tools.
+    </p>
+
+    <div class="facts">
+      <div class="column">
+        <h3 class="label">Now / 2026</h3>
+        <p class="bio">{site.bio}</p>
+      </div>
+
+      <div class="column" style="--i: 1">
+        <h3 class="label">Before that</h3>
+        <ul class="list">
+          {site.previously.map(({ work, org, place }) => (
+            <li class="item">
+              <Asterisk class="bullet" size="13px" strokeWidth={14} />
+              <span>
+                {work}{' '}
+                <span class="where">
+                  ({org}, {place})
+                </span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../scripts/reveal';
+</script>
+
+<style>
+  .about {
+    display: grid;
+    grid-template-areas: 'head' 'figure' 'body';
+    gap: 32px;
+    padding: 96px var(--gutter) 64px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  /* The photo fills the left column top to bottom, whichever side is taller. */
+  @media (min-width: 960px) {
+    .about {
+      grid-template-columns: 3fr 5fr;
+      grid-template-rows: auto 1fr;
+      grid-template-areas: 'figure head' 'figure body';
+      column-gap: clamp(40px, 4vw, 64px);
+    }
+  }
+
+  .label,
+  .caption {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .label {
+    font-size: 12px;
+    line-height: 1.55;
+  }
+
+  .head {
+    grid-area: head;
+    container-type: inline-size;
+  }
+
+  .title {
+    margin-top: 20px;
+    font-size: clamp(56px, 14.5cqi, 160px);
+    font-stretch: 62%;
+    font-weight: 900;
+    line-height: 0.9;
+    text-transform: uppercase;
+  }
+
+  .line {
+    display: block;
+  }
+
+  .line > span {
+    display: inline-block;
+  }
+
+  .accent {
+    color: var(--accent);
+  }
+
+  .figure {
+    grid-area: figure;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 480px;
+  }
+
+  @media (min-width: 960px) {
+    .figure {
+      max-width: none;
+    }
+  }
+
+  .frame {
+    position: relative;
+    flex: 1 0 auto;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border: 2px solid var(--ink);
+    background: var(--photo-tint);
+    transition: background-color 700ms ease;
+  }
+
+  .photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.1) brightness(1.05);
+    mix-blend-mode: multiply;
+    transition: filter 700ms ease;
+  }
+
+  /* Multiplied over white, the photo keeps its own colors. */
+  @media (hover: hover) {
+    .figure:hover .frame {
+      background-color: white;
+    }
+
+    .figure:hover .photo {
+      filter: none;
+    }
+  }
+
+  @media (hover: none) {
+    .hint {
+      display: none;
+    }
+  }
+
+  .caption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px 16px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .body {
+    grid-area: body;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 44px;
+  }
+
+  .lede {
+    max-width: 32em;
+    font-size: clamp(18px, 1.7vw, 22px);
+    font-weight: 500;
+    line-height: 1.55;
+  }
+
+  .facts {
+    position: relative;
+    display: grid;
+    gap: 32px 40px;
+    padding-top: 28px;
+  }
+
+  .facts::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 2px;
+    background: var(--ink);
+  }
+
+  @media (min-width: 600px) {
+    .facts {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .bio {
+    max-width: 440px;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.25;
+  }
+
+  .bio::after {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 22px;
+    margin-left: 4px;
+    vertical-align: -3px;
+    background: var(--ink);
+    animation: cursor-blink 1s step-end infinite;
+  }
+
+  :global(:root[data-motion='off']) .bio::after {
+    animation: none;
+  }
+
+  @keyframes cursor-blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0;
+    list-style: none;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  .item {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .bullet {
+    translate: 0 1px;
+  }
+
+  .where {
+    display: block;
+    color: var(--muted);
+  }
+
+  /*
+   * Appearance: the title rises line by line, the photo is uncovered from the bottom up
+   * while it settles from a zoom, then the text and the rule under it follow.
+   */
+  @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+    .about {
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .line {
+      clip-path: inset(-0.2em -0.1em 0);
+    }
+
+    .line > span {
+      transition: translate 750ms var(--ease-out) calc(var(--i, 0) * 80ms);
+    }
+
+    .frame {
+      clip-path: inset(0);
+      transition:
+        clip-path 900ms var(--ease-out),
+        background-color 700ms ease;
+    }
+
+    .photo {
+      transition:
+        scale 1200ms var(--ease-out),
+        filter 700ms ease;
+    }
+
+    .caption {
+      transition: opacity 500ms ease 450ms;
+    }
+
+    .lede {
+      transition:
+        opacity 600ms ease,
+        translate 750ms var(--ease-out);
+    }
+
+    .facts::before {
+      transform-origin: left;
+      transition: scale 700ms var(--ease-out) 100ms;
+    }
+
+    .column {
+      transition:
+        opacity 600ms ease calc(250ms + var(--i, 0) * 100ms),
+        translate 750ms var(--ease-out) calc(250ms + var(--i, 0) * 100ms);
+    }
+
+    :global(:root:not([data-motion='off'])) [data-reveal='waiting'] {
+      .line > span {
+        translate: 0 105%;
+      }
+
+      .frame {
+        clip-path: inset(100% 0 0);
+      }
+
+      .photo {
+        scale: 1.25;
+      }
+
+      .caption {
+        opacity: 0;
+      }
+
+      .lede,
+      .column {
+        opacity: 0;
+        translate: 0 16px;
+      }
+
+      .facts::before {
+        scale: 0 1;
+      }
+    }
+  }
+</style>
