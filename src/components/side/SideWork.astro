@@ -111,16 +111,22 @@ const words = ['On', 'the', 'side'];
   }
 
   /*
-   * The intro and the receipts share one track. The intro takes the room the first three
-   * receipts leave, but never gets narrower than a receipt. --fit scales the receipts.
+   * The intro and the receipts share one track. --fit scales the receipts; on a short, wide
+   * screen they also stretch up to 1.5x wider so three of them fill the room the intro
+   * doesn't need. The intro takes what is left, but never gets narrower than a receipt.
    */
   .runway {
     --title: clamp(56px, min(11vw, 13svh), 176px);
     --card: 312px;
     --gap: 28px;
     --fit: 1;
-    --slot: calc(var(--card) * var(--fit) + var(--gap));
-    --lead: max(var(--card) * var(--fit), 100cqw - 2 * var(--gutter) - 3 * var(--slot));
+    --wide: clamp(
+      var(--card) * var(--fit),
+      (100cqw - 2 * var(--gutter) - 3 * var(--gap) - 340px) / 3,
+      var(--card) * var(--fit) * 1.5
+    );
+    --slot: calc(var(--wide) + var(--gap));
+    --lead: max(var(--wide), 100cqw - 2 * var(--gutter) - 3 * var(--slot));
     --track: calc(2 * var(--gutter) + var(--lead) + var(--count) * var(--slot));
   }
 
@@ -243,7 +249,7 @@ const words = ['On', 'the', 'side'];
 
   .receipts > li {
     flex: none;
-    width: var(--card);
+    width: calc(var(--wide) / var(--fit));
     zoom: var(--fit);
     scroll-snap-align: start;
   }
