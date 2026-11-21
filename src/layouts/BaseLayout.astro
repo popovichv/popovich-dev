@@ -7,6 +7,8 @@ import '../styles/tokens.css';
 import '../styles/global.css';
 
 import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
+import logoDark from '../assets/logo-dark.svg?url';
+import logoLight from '../assets/logo-light.svg?url';
 import ContactSheet from '../components/ContactSheet.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { site } from '../data/site';
@@ -47,7 +49,8 @@ const person = {
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={logoLight} type="image/svg+xml" media="(prefers-color-scheme: light)" />
+    <link rel="icon" href={logoDark} type="image/svg+xml" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#f4f4f2" />
     <link rel="preload" href={archivoLatin} as="font" type="font/woff2" crossorigin />
 

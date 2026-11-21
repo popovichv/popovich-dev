@@ -1,5 +1,6 @@
 ---
 import { site } from '../data/site';
+import Logo from '../assets/logo-light.svg';
 import MotionToggle from './MotionToggle.astro';
 
 interface Props {
@@ -13,7 +14,7 @@ const { fullscreen = false } = Astro.props;
   <div class="screen">
     <div class="bar">
       <span class="brand">
-        <span class="mark" aria-hidden="true"></span>
+        <Logo width={22} height={22} aria-hidden="true" />
         {site.name} / {site.role.toLowerCase()}
       </span>
       <span>
@@ -72,12 +73,6 @@ const { fullscreen = false } = Astro.props;
     align-items: center;
     gap: 10px;
     font-weight: 700;
-  }
-
-  .mark {
-    width: 12px;
-    height: 12px;
-    background: var(--accent);
   }
 
   .actions {

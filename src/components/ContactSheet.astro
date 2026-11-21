@@ -1,4 +1,5 @@
 ---
+import Logo from '../assets/logo-ink.svg';
 import { site } from '../data/site';
 import Asterisk from './Asterisk.astro';
 import Marquee from './Marquee.astro';
@@ -12,7 +13,7 @@ const contacts = [
 <dialog id="contact" class="sheet" aria-labelledby="contact-title">
   <div class="bar">
     <h2 id="contact-title" class="title">
-      <span class="mark" aria-hidden="true"></span>
+      <Logo width={22} height={22} aria-hidden="true" />
       Contact
     </h2>
     <button type="button" class="close" commandfor="contact" command="close">
@@ -176,12 +177,6 @@ const contacts = [
     gap: 10px;
     font-size: inherit;
     font-weight: 700;
-  }
-
-  .mark {
-    width: 12px;
-    height: 12px;
-    background: var(--ink);
   }
 
   .close {
