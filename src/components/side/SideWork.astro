@@ -70,6 +70,52 @@ const words = ['On', 'the', 'side'];
 
 <script>
   import '../../scripts/reveal';
+
+  /*
+   * The CSS guesses --fit from the screen height, but text wraps differently from browser to
+   * browser. Once the board is pinned, measure where the receipts really end and rescale them
+   * to end at the bottom of the screen. A few passes, since rescaling changes how text wraps.
+   */
+  const runway = document.querySelector<HTMLElement>('#side .runway')!;
+  const rail = runway.querySelector<HTMLElement>('.rail')!;
+  const practice = runway.querySelector<HTMLElement>('.practice')!;
+  const receipts = [...runway.querySelectorAll<HTMLElement>('.receipts > li')];
+
+  const zoomOf = (element: HTMLElement) => parseFloat(getComputedStyle(element).zoom) || 1;
+  const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+
+  // The new scale that moves the bottom of `boxes` to `floor`, keeping their tops in place.
+  function rescale(boxes: HTMLElement[], floor: number) {
+    const rects = boxes.map((box) => box.getBoundingClientRect());
+    const top = Math.min(...rects.map((rect) => rect.top));
+    const bottom = Math.max(...rects.map((rect) => rect.bottom));
+    return (zoomOf(boxes[0]) * (floor - top)) / (bottom - top);
+  }
+
+  function fitToScreen() {
+    runway.style.removeProperty('--fit');
+    practice.style.removeProperty('--pfit');
+    if (getComputedStyle(rail).position !== 'sticky') return;
+
+    const { top, height } = rail.getBoundingClientRect();
+    const floor = top + height - parseFloat(getComputedStyle(rail).paddingBottom);
+    for (let pass = 0; pass < 3; pass++) {
+      runway.style.setProperty('--fit', String(clamp(rescale(receipts, floor), 0.6, 1.3)));
+    }
+    const fit = zoomOf(receipts[0]);
+    for (let pass = 0; pass < 3; pass++) {
+      practice.style.setProperty('--pfit', String(clamp(rescale([practice], floor), 0.5, fit)));
+    }
+  }
+
+  let frame = 0;
+  const refit = () => {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(fitToScreen);
+  };
+  addEventListener('resize', refit);
+  document.fonts.ready.then(refit);
+  refit();
 </script>
 
 <style>
@@ -191,11 +237,12 @@ const words = ['On', 'the', 'side'];
     padding-top: 14px;
   }
 
-  /* Grows to end level with the receipts beside it, but never past their scale. */
+  /* Grows to end level with the receipts beside it, but never past their scale or width. */
   .practice {
-    width: var(--card);
+    --pfit: clamp(0.5, var(--fit) * 1.6 - 0.5, var(--fit));
+    width: min(var(--wide) / var(--pfit), var(--card) * 1.5);
     margin-top: 28px;
-    zoom: clamp(0.5, var(--fit) * 1.6 - 0.5, var(--fit));
+    zoom: var(--pfit);
   }
 
   .lede {
