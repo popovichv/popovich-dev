@@ -1,0 +1,67 @@
+---
+interface Props {
+  kind: 'web' | 'chat';
+}
+
+const { kind } = Astro.props;
+---
+
+<svg class="sketch" viewBox="0 0 240 132" aria-hidden="true">
+  {kind === 'web' ? (
+    <>
+      <path class="line" d="M0 16H240" />
+      <circle class="fill" cx="10" cy="8" r="2.5" />
+      <circle class="fill" cx="18" cy="8" r="2.5" />
+      <circle class="fill" cx="26" cy="8" r="2.5" />
+      <rect class="line" x="38" y="3.5" width="150" height="9" rx="4.5" />
+      <rect class="block" x="10" y="26" width="46" height="96" />
+      <rect class="accent" x="68" y="28" width="96" height="8" />
+      <rect class="block" x="68" y="46" width="76" height="34" />
+      <rect class="block" x="152" y="46" width="78" height="34" />
+      <rect class="block" x="68" y="88" width="76" height="34" />
+      <rect class="block" x="152" y="88" width="78" height="34" />
+    </>
+  ) : (
+    <>
+      <path class="line" d="M0 20H240" />
+      <circle class="fill" cx="14" cy="10" r="6" />
+      <rect class="fill" x="26" y="7" width="56" height="6" />
+      <rect class="accent" x="146" y="28" width="84" height="14" rx="7" />
+      <rect class="line" x="10" y="50" width="150" height="72" rx="6" />
+      <rect class="fill" x="20" y="60" width="70" height="5" />
+      <rect class="block" x="20" y="74" width="30" height="5" />
+      <rect class="block" x="20" y="88" width="30" height="5" />
+      <rect class="block" x="20" y="102" width="30" height="5" />
+      <rect class="fill" x="70" y="74" width="60" height="5" />
+      <rect class="fill" x="70" y="88" width="44" height="5" />
+      <rect class="fill" x="70" y="102" width="70" height="5" />
+    </>
+  )}
+</svg>
+
+<style>
+  .sketch {
+    width: 100%;
+    height: auto;
+    padding: 8px;
+    stroke-width: 1.5;
+  }
+
+  .line {
+    fill: none;
+    stroke: var(--ink);
+  }
+
+  .fill {
+    fill: var(--ink);
+  }
+
+  .block {
+    fill: var(--rule);
+    stroke: var(--ink);
+  }
+
+  .accent {
+    fill: var(--accent);
+  }
+</style>

@@ -1,0 +1,353 @@
+---
+import { leetcode, sideProjects } from '../../data/side-projects';
+import SectionBand from '../SectionBand.astro';
+import Receipt from './Receipt.astro';
+
+const count = sideProjects.length;
+const words = ['On', 'the', 'side'];
+---
+
+<section class="side" id="side" aria-labelledby="side-title">
+  <SectionBand words={['Side work', 'Contracts', 'Personal']} />
+
+  <div class="runway" style={`--count: ${count}`}>
+    <div class="rail">
+      <div class="head" data-reveal="waiting">
+        <p class="label">(03) Side work / {count} receipts</p>
+        <h2 id="side-title" class="title">
+          {words.map((word, index) => (
+            <>
+              <span class="word" style={`--i: ${index}`}>
+                <span>{word}</span>
+              </span>{' '}
+            </>
+          ))}
+        </h2>
+      </div>
+
+      <p class="rail-head">
+        <span>Pinboard</span>
+        <span class="progress" aria-hidden="true"></span>
+        <span class="pinned-only">Moves sideways while you scroll down</span>
+        <span class="free-only">Scroll it sideways</span>
+      </p>
+
+      <div class="window">
+        <div class="track">
+          <div class="intro">
+            <p class="lede">Contracts I take on and tools I build for myself, one receipt each.</p>
+            <dl class="legend">
+              <div>
+                <dt class="tag paid">Paid</dt>
+                <dd>Contract work for a client</dd>
+              </div>
+              <div>
+                <dt class="tag mine">Mine</dt>
+                <dd>Personal project</dd>
+              </div>
+              <div>
+                <dt class="tag total">Total</dt>
+                <dd>The result, one line</dd>
+              </div>
+            </dl>
+            <div class="practice">
+              <Receipt project={leetcode} number={0} />
+            </div>
+          </div>
+
+          <ol class="receipts">
+            {sideProjects.map((project, index) => (
+              <li>
+                <Receipt project={project} number={count - index} />
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../../scripts/reveal';
+</script>
+
+<style>
+  .side {
+    container-type: inline-size;
+  }
+
+  .head {
+    padding-inline: var(--gutter);
+  }
+
+  .label,
+  .rail-head,
+  .legend {
+    font-family: var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .label {
+    color: var(--muted);
+    font-size: var(--text-label);
+    line-height: 1.55;
+  }
+
+  .title {
+    margin-top: 16px;
+    font-size: var(--title);
+    font-stretch: 62%;
+    font-weight: 900;
+    line-height: 0.8;
+    word-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .word,
+  .word > span {
+    display: inline-block;
+  }
+
+  /*
+   * The intro and the receipts share one track. The intro takes the room the first three
+   * receipts leave, but never gets narrower than a receipt. --fit scales the receipts.
+   */
+  .runway {
+    --title: clamp(56px, min(11vw, 13svh), 176px);
+    --card: 312px;
+    --gap: 28px;
+    --fit: 1;
+    --slot: calc(var(--card) * var(--fit) + var(--gap));
+    --lead: max(var(--card) * var(--fit), 100cqw - 2 * var(--gutter) - 3 * var(--slot));
+    --track: calc(2 * var(--gutter) + var(--lead) + var(--count) * var(--slot));
+  }
+
+  @media (max-width: 599px) {
+    .runway {
+      --card: 272px;
+      --gap: 20px;
+    }
+  }
+
+  .rail {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: 64px 32px;
+  }
+
+  .rail-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 36px;
+    padding-inline: var(--gutter);
+    font-size: var(--text-meta);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 599px) {
+    .rail-head > :is(:first-child, .progress) {
+      display: none;
+    }
+  }
+
+  .progress {
+    flex: 1;
+    height: 1px;
+    background: var(--ink);
+  }
+
+  .pinned-only {
+    display: none;
+  }
+
+  .window {
+    margin-top: 24px;
+    padding-block: 8px 32px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+  }
+
+  .track {
+    display: flex;
+    gap: var(--gap);
+    width: max-content;
+    padding-inline: var(--gutter);
+  }
+
+  .intro {
+    flex: none;
+    width: var(--lead);
+    padding-top: 14px;
+  }
+
+  /* Grows to end level with the receipts beside it, but never past their scale. */
+  .practice {
+    width: var(--card);
+    margin-top: 28px;
+    zoom: clamp(0.5, var(--fit) * 1.6 - 0.5, var(--fit));
+  }
+
+  .lede {
+    max-width: 16em;
+    font-size: var(--text-lede);
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  .legend {
+    display: grid;
+    gap: 10px;
+    margin-top: 28px;
+    font-size: var(--text-meta);
+  }
+
+  .legend div {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .legend dd {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .tag {
+    min-width: 6em;
+    padding: 1px 6px;
+    border: 1.5px solid;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .paid {
+    color: var(--accent);
+  }
+
+  .total {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+
+  .receipts {
+    display: flex;
+    gap: var(--gap);
+    padding: 0;
+    list-style: none;
+  }
+
+  .receipts > li {
+    flex: none;
+    width: var(--card);
+    zoom: var(--fit);
+    scroll-snap-align: start;
+  }
+
+  /*
+   * Where the browser can tie an animation to scrolling, the rail pins to the screen and,
+   * after a pause of --hold so the intro can be read, the track slides left by exactly as
+   * much as the page scrolls down. Elsewhere, and with
+   * reduced motion, the receipts sit in a row you scroll sideways yourself.
+   */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      /*
+       * The pinned board fills the screen: receipts shrink on a short screen and grow on a
+       * tall one. The room under the heading, less the spacing around the receipts and their
+       * shadows, is divided by their natural height of 600px; tan(atan2(a, b)) is how CSS
+       * turns a ratio of two lengths into a plain number.
+       */
+      .runway {
+        --fit: clamp(0.6, tan(atan2(100svh - 0.8 * var(--title) - 240px, 600px)), 1.3);
+        --hold: 40svh;
+        height: calc(100svh + var(--hold) + max(0px, var(--track) - 100cqw));
+        view-timeline: --rail block;
+      }
+
+      .rail {
+        position: sticky;
+        top: 0;
+        height: 100svh;
+      }
+
+      .pinned-only {
+        display: inline;
+      }
+
+      .free-only {
+        display: none;
+      }
+
+      /* Clipped at the sides only, so pins and shadows can reach past the top and bottom. */
+      .window {
+        min-height: 0;
+        padding-bottom: 0;
+        overflow-x: clip;
+        overflow-y: visible;
+      }
+
+      .track,
+      .progress::after {
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: --rail;
+        animation-range: contain var(--hold) contain 100%;
+      }
+
+      .track {
+        animation-name: rail-slide;
+      }
+
+      .progress {
+        position: relative;
+        background: var(--rule);
+      }
+
+      .progress::after {
+        content: '';
+        position: absolute;
+        inset: -0.5px 0;
+        background: var(--ink);
+        transform-origin: left;
+        animation-name: rail-progress;
+      }
+
+      /* Scrolling drives the rail, so it keeps moving when motion is paused. */
+      :global(:root[data-motion='off']) .track,
+      :global(:root[data-motion='off']) .progress::after {
+        animation-play-state: running !important;
+      }
+    }
+  }
+
+  @keyframes rail-slide {
+    to {
+      translate: min(0px, 100cqw - 100%) 0;
+    }
+  }
+
+  @keyframes rail-progress {
+    from {
+      scale: 0 1;
+    }
+  }
+
+  @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+    .word {
+      clip-path: inset(-0.2em -0.1em 0);
+    }
+
+    .word > span {
+      transition: translate 900ms cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i) * 90ms);
+    }
+
+    :global(:root:not([data-motion='off'])) [data-reveal='waiting'] .word > span {
+      translate: 0 105%;
+    }
+  }
+</style>

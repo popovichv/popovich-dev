@@ -6,6 +6,7 @@
   --ink: #0c0c0c;
   --accent: #ff5a00;
   --muted: #555553;
+  --paper: #fdfdfb;
   --rule: color-mix(in srgb, var(--ink) 14%, var(--ground));
 
   /* Photo tint: a mix of ground and accent. 0% is plain black and white, 100% is full orange. */

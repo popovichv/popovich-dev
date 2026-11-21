@@ -1,0 +1,389 @@
+---
+import { Image } from 'astro:assets';
+import type { SideProject } from '../../data/side-projects';
+import { site } from '../../data/site';
+import Sketch from './Sketch.astro';
+
+interface Props {
+  project: SideProject;
+  number: number;
+}
+
+const { project, number } = Astro.props;
+const { name, kind, billedTo, date, repo, figure, items, total } = project;
+
+const shop = `${site.name.split(' ')[0]} & Co.`;
+const type = kind === 'paid' ? 'Contract' : 'Personal';
+const id = `receipt-${number}`;
+
+// Pinned up by hand: each receipt hangs from its pin at its own angle and height.
+const hangs = [
+  { swing: -1, drop: 18 },
+  { swing: 2.4, drop: 14 },
+  { swing: 0, drop: 0 },
+  { swing: 1.4, drop: 24 },
+  { swing: -2, drop: 6 },
+];
+const { swing, drop } = hangs[number % hangs.length];
+
+// A made-up barcode that spells the name in binary: a wide bar for 1, a thin one for 0.
+const bits = [...name].flatMap((char) => [...char.charCodeAt(0).toString(2).padStart(7, '0')]);
+let barcode = '';
+let x = 0;
+for (let index = 0; index < 96; index++) {
+  const width = bits[index % bits.length] === '1' ? 2 : 1;
+  barcode += `M${x} 0h${width}v1h-${width}z`;
+  x += width + 1;
+}
+---
+
+<article
+  class="receipt"
+  data-kind={kind}
+  data-reveal="waiting"
+  aria-labelledby={id}
+  style={`--tilt: ${number % 2 ? -1.5 : 1.2}deg; --swing: ${swing}deg; --drop: ${drop}px`}
+>
+  <div class="paper">
+    <p class="row shop">
+      <span>{shop}</span>
+      <span>No. {String(number).padStart(3, '0')}</span>
+    </p>
+    <h3 class="name" id={id}>
+      {name}
+    </h3>
+    <span class="stamp" aria-hidden="true">
+      {kind}
+    </span>
+
+    <dl class="meta">
+      <div class="row">
+        <dt>Billed to</dt>
+        <dd>{billedTo}</dd>
+      </div>
+      <div class="row">
+        <dt>Type</dt>
+        <dd>{type}</dd>
+      </div>
+      <div class="row">
+        <dt>Date</dt>
+        <dd>{date}</dd>
+      </div>
+      <div class="row">
+        <dt>Repo</dt>
+        <dd>
+          {repo ? (
+            <a class="repo" href={repo} target="_blank">
+              GitHub
+              <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 18 18 6M8 6h10v10" />
+              </svg>
+            </a>
+          ) : (
+            'Private'
+          )}
+        </dd>
+      </div>
+    </dl>
+
+    {figure && (
+      <figure class="figure">
+        {figure.image ? (
+          <Image
+            class="photo"
+            src={figure.image.src}
+            alt={figure.image.alt}
+            widths={[280, 560]}
+            sizes="280px"
+          />
+        ) : (
+          <Sketch kind={figure.sketch} />
+        )}
+        <figcaption class="caption">{figure.caption}</figcaption>
+      </figure>
+    )}
+
+    <ul class="items">
+      {items.map(({ label, qty }) => (
+        <li class="item">
+          <span>{label}</span>
+          <span class="qty">{qty}</span>
+        </li>
+      ))}
+    </ul>
+
+    <p class="row total">
+      <span>Total</span>
+      <strong class="result">{total}</strong>
+    </p>
+
+    <svg
+      class="barcode"
+      viewBox={`0 0 ${x - 1} 1`}
+      preserveAspectRatio="none"
+      shape-rendering="crispEdges"
+      aria-hidden="true"
+    >
+      <path d={barcode}></path>
+    </svg>
+    <p class="thanks">Thank you, come again</p>
+  </div>
+</article>
+
+<style>
+  .receipt {
+    position: relative;
+    margin-top: var(--drop);
+    rotate: var(--swing);
+    transform-origin: 50% 6px;
+    filter: drop-shadow(0 1px 1px color-mix(in srgb, var(--ink) 10%, transparent))
+      drop-shadow(0 10px 16px color-mix(in srgb, var(--ink) 10%, transparent));
+  }
+
+  /* A pushpin holding the receipt to the wall. */
+  .receipt::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 35% 35%,
+      color-mix(in srgb, var(--accent) 30%, var(--paper)) 0 2px,
+      var(--accent) 6px,
+      color-mix(in srgb, var(--accent) 65%, var(--ink))
+    );
+    box-shadow: 2px 3px 3px color-mix(in srgb, var(--ink) 35%, transparent);
+    translate: -50% 0;
+  }
+
+  /* Plain paper down to a torn, zigzag bottom edge. */
+  .paper {
+    --tooth: 6px;
+    position: relative;
+    padding: 18px 18px calc(18px + var(--tooth));
+    background:
+      linear-gradient(var(--paper) 0 0) top / 100% calc(100% - var(--tooth)) no-repeat,
+      conic-gradient(from -45deg at 50% 100%, var(--paper) 90deg, transparent 0) left bottom / 12px
+        var(--tooth) round no-repeat;
+    font-family: var(--font-mono);
+    font-size: var(--text-meta);
+    letter-spacing: 0.04em;
+    line-height: 1.7;
+    text-transform: uppercase;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .shop {
+    color: var(--muted);
+  }
+
+  .name {
+    margin-top: 8px;
+    white-space: pre-line;
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-stretch: 75%;
+    font-weight: 900;
+    letter-spacing: 0;
+    line-height: 1.05;
+  }
+
+  /* Keeps the first line clear of the stamp; later lines get the full width. */
+  .name::before {
+    content: '';
+    float: right;
+    width: 76px;
+    height: 1em;
+  }
+
+  .stamp {
+    position: absolute;
+    top: 42px;
+    right: 14px;
+    padding: 0 7px;
+    border: 2px solid;
+    border-radius: 4px;
+    outline: 1px solid;
+    outline-offset: 2px;
+    color: var(--accent);
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    mix-blend-mode: multiply;
+    rotate: -9deg;
+  }
+
+  [data-kind='mine'] .stamp {
+    color: var(--ink);
+    rotate: 7deg;
+  }
+
+  .meta {
+    margin-top: 6px;
+  }
+
+  dd {
+    margin: 0;
+  }
+
+  .repo {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .repo:hover {
+    color: var(--accent);
+  }
+
+  .arrow {
+    width: 10px;
+    height: 10px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+  }
+
+  .figure {
+    position: relative;
+    margin-top: 16px;
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    rotate: var(--tilt);
+  }
+
+  /* A strip of tape holding the picture to the paper. */
+  .figure::before {
+    content: '';
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    z-index: 1;
+    width: 48px;
+    height: 16px;
+    background: color-mix(in srgb, var(--ink) 14%, transparent);
+    translate: -50% 0;
+    rotate: calc(var(--tilt) * -2);
+  }
+
+  .photo {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 240 / 132;
+    object-fit: cover;
+  }
+
+  .caption {
+    padding: 2px 8px;
+    border-top: 1px solid var(--ink);
+  }
+
+  .items {
+    margin-top: 16px;
+    padding: 10px 0 0;
+    border-top: 1.5px dashed var(--ink);
+    list-style: none;
+  }
+
+  /* A dotted leader runs from the label to the quantity. */
+  .item {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .item::after {
+    content: '';
+    order: 1;
+    flex: 1;
+    border-bottom: 1px dotted var(--muted);
+  }
+
+  .qty {
+    order: 2;
+  }
+
+  .total {
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1.5px dashed var(--ink);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .result {
+    padding: 1px 8px;
+    background: var(--accent);
+    font-size: var(--text-meta);
+  }
+
+  .barcode {
+    width: 100%;
+    height: 38px;
+    margin-top: 16px;
+    fill: var(--ink);
+  }
+
+  .thanks {
+    margin-top: 4px;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-align: center;
+  }
+
+  /*
+   * Appearance: the pin goes in, the receipt prints down from it in jerky line feeds,
+   * then gets stamped. The mask grows past the bottom edge so its faded end clears the paper.
+   */
+  @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+    .receipt::before {
+      transition:
+        opacity 0s,
+        scale 350ms cubic-bezier(0.3, 1.7, 0.6, 1);
+    }
+
+    .paper {
+      --fade: 48px;
+      mask: linear-gradient(#000 calc(100% - var(--fade)), transparent) top / 100%
+        calc(100% + var(--fade)) no-repeat;
+      transition: mask-size 1700ms steps(22) 300ms;
+    }
+
+    .stamp {
+      transition:
+        opacity 0s 1900ms,
+        scale 400ms cubic-bezier(0.3, 1.7, 0.6, 1) 1900ms;
+    }
+
+    :global(:root:not([data-motion='off'])) [data-reveal='waiting'] {
+      &::before {
+        opacity: 0;
+        scale: 2.2;
+      }
+
+      .paper {
+        mask-size: 100% 0;
+      }
+
+      .stamp {
+        opacity: 0;
+        scale: 2.4;
+      }
+    }
+  }
+</style>
