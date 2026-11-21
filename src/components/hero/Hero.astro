@@ -6,9 +6,6 @@ import PhotoCapsule from './PhotoCapsule.astro';
 import Slash from './Slash.astro';
 
 const [firstName, lastName] = site.name.split(' ');
-
-// Seven words: listing them twice keeps solid and outline alternating across the loop seam.
-const tools = [...site.tools, ...site.tools];
 ---
 
 <div class="hero">
@@ -34,7 +31,7 @@ const tools = [...site.tools, ...site.tools];
       <span class="dot">●</span>
     </Marquee>
 
-    <Marquee class="stack" direction="right" duration={55} repeat={2}>
+    <Marquee class="stack" direction="right" duration={55}>
       {site.stack.map((tech) => (
         <>
           <span>{tech}</span>
@@ -43,15 +40,16 @@ const tools = [...site.tools, ...site.tools];
       ))}
     </Marquee>
 
-    <Marquee class="band ink-band" duration={40} repeat={2}>
+    <Marquee class="band ink-band" duration={40}>
       <span>{site.role}</span>
       <Asterisk spin />
       <span>{site.city}</span>
       <Asterisk spin />
     </Marquee>
 
-    <Marquee class="tools" direction="right" duration={70}>
-      {tools.map((tool, index) => (
+    {/* An even number of tools keeps solid and outline alternating across the loop seam. */}
+    <Marquee class="tools" direction="right" duration={40}>
+      {site.tools.map((tool, index) => (
         <span class:list={{ 'accent-outline': index % 2 }}>{tool}</span>
       ))}
     </Marquee>

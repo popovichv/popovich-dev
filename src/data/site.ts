@@ -23,7 +23,7 @@ export const site = {
     },
   ],
   stack: ['TypeScript', 'React', 'Angular', 'Python', 'FastAPI', '.NET'],
-  tools: ['PostgreSQL', 'RAG', 'Azure', 'AWS', 'Docker', 'MCP', 'LLMs'],
+  tools: ['PostgreSQL', 'RAG', 'Azure', 'AWS', 'Docker', 'MCP', 'LLMs', 'CI/CD'],
   email: 'vladimirpopovich06@gmail.com',
   profiles: [
     { label: 'GitHub', handle: 'popovichv', href: 'https://github.com/popovichv' },
