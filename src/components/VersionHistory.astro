@@ -1,12 +1,15 @@
 ---
 import { history } from '../data/history';
+import SectionBand from './SectionBand.astro';
 
 const command = '$ git log main';
 const branchIndex = history.findIndex((commit) => commit.branch);
 ---
 
 <section class="history" id="work" aria-labelledby="history-title">
-  <div class="head" data-reveal="waiting" style={`--chars: ${command.length}`}>
+  <SectionBand words={['Work', 'Experience', 'Releases']} direction="right" />
+
+  <div class="intro" data-reveal="waiting" style={`--chars: ${command.length}`}>
     <p class="label">
       (02) Work / <span class="command">{command}</span>
     </p>
@@ -21,7 +24,7 @@ const branchIndex = history.findIndex((commit) => commit.branch);
     <p class="lede">My career as releases. Each job is a version, each project a commit.</p>
   </div>
 
-  <ol class="log" data-reveal="waiting" style={`--rows: ${history.length}`}>
+  <ol class="log" data-reveal="waiting">
     {history.map(({ hash, type, scope, message, date, tag, branch }, index) => (
       <li class="commit" style={`--i: ${index}`}>
         <div
@@ -65,7 +68,16 @@ const branchIndex = history.findIndex((commit) => commit.branch);
 
 <style>
   .history {
-    padding: 64px var(--gutter) 96px;
+    padding-bottom: 40px;
+  }
+
+  .intro,
+  .log {
+    margin-inline: var(--gutter);
+  }
+
+  .intro {
+    padding-top: 64px;
   }
 
   .label,
@@ -119,8 +131,7 @@ const branchIndex = history.findIndex((commit) => commit.branch);
     list-style: none;
   }
 
-  .log::before,
-  .log::after {
+  .log::before {
     content: '';
     display: block;
     height: 2px;
@@ -298,7 +309,7 @@ const branchIndex = history.findIndex((commit) => commit.branch);
       --step: 110ms;
     }
 
-    .head {
+    .intro {
       --typing: calc(var(--chars) * 28ms);
     }
 
@@ -332,14 +343,9 @@ const branchIndex = history.findIndex((commit) => commit.branch);
         translate 900ms var(--ease-out) calc(var(--typing) + 300ms);
     }
 
-    .log::before,
-    .log::after {
+    .log::before {
       transform-origin: left;
       transition: scale 800ms var(--ease-out);
-    }
-
-    .log::after {
-      transition-delay: calc(var(--rows) * var(--step));
     }
 
     .graph {
@@ -371,8 +377,7 @@ const branchIndex = history.findIndex((commit) => commit.branch);
         translate: 0 16px;
       }
 
-      &.log::before,
-      &.log::after {
+      &.log::before {
         scale: 0 1;
       }
 

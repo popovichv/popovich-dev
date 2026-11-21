@@ -1,0 +1,35 @@
+---
+import Asterisk from './Asterisk.astro';
+import Marquee from './Marquee.astro';
+
+interface Props {
+  words: string[];
+  direction?: 'left' | 'right';
+  duration?: number;
+}
+
+const { words, direction, duration = 14 } = Astro.props;
+---
+
+<Marquee class="section-band" {direction} {duration} repeat={2} aria-hidden="true">
+  {words.map((word) => (
+    <>
+      <span>{word}</span>
+      <Asterisk spin />
+    </>
+  ))}
+</Marquee>
+
+<style>
+  .section-band {
+    --marquee-gap: 0.22em;
+    padding: 0.07em 0 0.03em;
+    background: var(--ink);
+    color: var(--ground);
+    font-size: clamp(44px, 7vw, 112px);
+    font-stretch: 75%;
+    font-weight: 900;
+    line-height: 0.8;
+    text-transform: uppercase;
+  }
+</style>
