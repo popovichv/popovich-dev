@@ -5,6 +5,7 @@ import expenseBot from '../assets/telegram-expense-tracker.webp';
 import autoControl from '../assets/autocontrol.webp';
 import fruitlandGame from '../assets/fruitland-diagnostic.webp';
 import popovichDev from '../assets/popovich-dev.webp';
+import spamClassifier from '../assets/spam-email-classifier.webp';
 
 interface LineItem {
   label: string;
@@ -185,6 +186,14 @@ export const sideProjects: SideProject[] = [
     billedTo: 'Myself',
     date: '2025',
     repo: 'https://github.com/popovichv/spam-email-classifier',
+    figure: {
+      caption: '[ml] Dataset notebook',
+      sketch: 'web',
+      image: {
+        src: spamClassifier,
+        alt: 'Jupyter notebook cell showing the 5,728-email dataset with its text and spam columns',
+      },
+    },
     items: [
       { label: 'TF-IDF, uni + bigrams', qty: '✓' },
       { label: 'Naive Bayes, sklearn', qty: '1' },
