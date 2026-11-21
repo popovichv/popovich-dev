@@ -10,6 +10,7 @@ import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wdth-
 import logoDark from '../assets/logo-dark.svg?url';
 import logoLight from '../assets/logo-light.svg?url';
 import ContactSheet from '../components/ContactSheet.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { site } from '../data/site';
 
@@ -73,6 +74,7 @@ const person = {
     <main id="main">
       <slot />
     </main>
+    <SiteFooter />
     <ContactSheet />
   </body>
 </html>
