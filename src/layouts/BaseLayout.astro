@@ -21,7 +21,7 @@ interface Props {
 
 const { title, description = site.bio } = Astro.props;
 
-const siteTitle = `${site.name}, ${site.role.toLowerCase()}`;
+const siteTitle = site.name;
 const pageTitle = title ? `${title} · ${site.name}` : siteTitle;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 
